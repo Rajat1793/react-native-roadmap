@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Native Learning Tracker</title>
+    <link rel="stylesheet" href="styles.css?v=2.6">
+</head>
+<body>
+    <div class="container">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()" id="darkModeToggle" aria-label="Toggle dark mode">
+            🌙
+        </button>
+        
+        <button class="color-picker-toggle" onclick="toggleColorPicker()" id="colorPickerToggle" aria-label="Customize colors">
+            🎨
+        </button>
+        
+        <div class="color-picker-panel" id="colorPickerPanel" style="display: none;">
+            <div class="color-picker-header">
+                <h3>🎨 Customize Colors</h3>
+                <button class="close-btn" onclick="toggleColorPicker()">✕</button>
+            </div>
+            <div class="color-picker-content">
+                <div class="color-input-group">
+                    <label for="primaryColor">Primary Color (Buttons & Headers)</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="primaryColor" value="#9CAB88" onchange="updateColorsFromPicker('primary')">
+                        <input type="text" id="primaryColorHex" value="#9CAB88" placeholder="#9CAB88" maxlength="7" oninput="updateColorsFromHex('primary')">
+                    </div>
+                </div>
+                <div class="color-input-group">
+                    <label for="secondaryColor">Secondary Color (Gradients)</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="secondaryColor" value="#89986D" onchange="updateColorsFromPicker('secondary')">
+                        <input type="text" id="secondaryColorHex" value="#89986D" placeholder="#89986D" maxlength="7" oninput="updateColorsFromHex('secondary')">
+                    </div>
+                </div>
+                <div class="color-input-group">
+                    <label for="bgColor">Background Color</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="bgColor" value="#F6F0D7" onchange="updateColorsFromPicker('bg')">
+                        <input type="text" id="bgColorHex" value="#F6F0D7" placeholder="#F6F0D7" maxlength="7" oninput="updateColorsFromHex('bg')">
+                    </div>
+                </div>
+                <div class="color-input-group">
+                    <label for="accentColor">Accent Color (Highlights)</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="accentColor" value="#C5D89D" onchange="updateColorsFromPicker('accent')">
+                        <input type="text" id="accentColorHex" value="#C5D89D" placeholder="#C5D89D" maxlength="7" oninput="updateColorsFromHex('accent')">
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="resetColors()" style="width: 100%; margin-top: 10px;">
+                    🔄 Reset to Default
+                </button>
+            </div>
+        </div>
+        
+        <header class="header">
+            <h1>🚀 React Native Learning Roadmap</h1>
+            <p class="subtitle">Your Complete Guide from Beginner to Advanced with Expo</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar" id="overallProgress">0%</div>
+            </div>
+            <div class="progress-stats">
+                <span id="completedCount">0 of 26 topics completed</span>
+                <span id="percentageText">0%</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <select class="phase-dropdown" id="phaseDropdown" onchange="scrollToPhase(this.value)">
+                <option value="">📍 Jump to Phase...</option>
+                <option value="0">Phase 1: Foundation</option>
+                <option value="1">Phase 2: Core Concepts</option>
+                <option value="2">Phase 3: Advanced Features</option>
+                <option value="3">Phase 4: Professional Development</option>
+            </select>
+            <button class="btn btn-secondary" onclick="showRoadmap()">
+                📍 Roadmap
+            </button>
+            <button class="btn btn-secondary" onclick="toggleWeeklyPlan()">
+                📅 12-Week Daily Plan
+            </button>
+            <button class="btn btn-secondary" onclick="togglePracticeExercises()">
+                💪 Practice Exercises
+            </button>
+            <button class="btn btn-danger" onclick="resetProgress()">
+                🔄 Reset Progress
+            </button>
+        </div>
+        
+        <section id="weeklyPlanSection" style="display: none;">
+            <div class="weekly-plan-header">
+                <h2>📅 12-Week Daily Learning Plan</h2>
+                <p>Structured daily lessons with practice tasks and reflections (Mon-Fri, weekends for review)</p>
+            </div>
+            <div id="weeklyPlanContainer"></div>
+        </section>
+
+        <div id="practiceExercises" class="practice-exercises-section" style="display: none;">
+            <div class="header" style="margin-bottom: 30px;">
+                <h1>💪 Practice Exercises</h1>
+                <p class="subtitle">Complete these hands-on exercises to solidify your React Native skills. Start from Exercise 1 and progress through increasing difficulty levels.</p>
+            </div>
+            
+            <div class="exercise-item">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Exercise 1: Hello World App</div>
+                    </div>
+                    <div class="difficulty-badge easy">Beginner</div>
+                </div>
+                <div class="exercise-content">
+                    <h4>📚 What You'll Learn</h4>
+                    <p>Basic React Native setup, Text and View components, styling with StyleSheet</p>
+                    
+                    <h4>🎯 Your Task</h4>
+                    <p>Create a simple app that displays "Hello, React Native!" centered on the screen with custom styling (background color, text color, font size).</p>
+                    
+                    <h4>✅ How to Verify</h4>
+                    <ul>
+                        <li>App runs without errors in Expo Go</li>
+                        <li>Text is centered both horizontally and vertically</li>
+                        <li>Custom styles are applied (non-default colors and font size)</li>
+                        <li>Background color fills the entire screen</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exercise-item">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Exercise 2: Interactive Counter</div>
+                    </div>
+                    <div class="difficulty-badge easy">Beginner</div>
+                </div>
+                <div class="exercise-content">
+                    <h4>📚 What You'll Learn</h4>
+                    <p>useState hook, event handling with onPress, Button/TouchableOpacity components</p>
+                    
+                    <h4>🎯 Your Task</h4>
+                    <p>Build a counter app with three buttons: Increment (+1), Decrement (-1), and Reset. Display the current count on screen.</p>
+                    
+                    <h4>✅ How to Verify</h4>
+                    <ul>
+                        <li>Increment button increases count by 1</li>
+                        <li>Decrement button decreases count by 1</li>
+                        <li>Reset button sets count back to 0</li>
+                        <li>Count updates immediately when buttons are pressed</li>
+                        <li>Buttons are styled and easy to tap</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exercise-item">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Exercise 3: Todo List</div>
+                    </div>
+                    <div class="difficulty-badge medium">Intermediate</div>
+                </div>
+                <div class="exercise-content">
+                    <h4>📚 What You'll Learn</h4>
+                    <p>TextInput, FlatList, managing arrays in state, key props, conditional rendering</p>
+                    
+                    <h4>🎯 Your Task</h4>
+                    <p>Create a todo list where users can add new tasks, mark them as complete (strikethrough), and delete tasks. Use FlatList for efficient rendering.</p>
+                    
+                    <h4>✅ How to Verify</h4>
+                    <ul>
+                        <li>Can add new todos via TextInput</li>
+                        <li>Input clears after adding a todo</li>
+                        <li>Can tap a todo to toggle complete/incomplete (with visual change)</li>
+                        <li>Can delete individual todos</li>
+                        <li>List scrolls smoothly with many items</li>
+                        <li>Empty input doesn't create blank todos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exercise-item">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Exercise 4: Profile Card with Navigation</div>
+                    </div>
+                    <div class="difficulty-badge medium">Intermediate</div>
+                </div>
+                <div class="exercise-content">
+                    <h4>📚 What You'll Learn</h4>
+                    <p>React Navigation (Stack), passing data between screens, Image component, ScrollView</p>
+                    
+                    <h4>🎯 Your Task</h4>
+                    <p>Build a 2-screen app: Home screen shows a list of user profiles (name + small image), tapping opens a Detail screen with full profile info (large image, bio, contact info). Add a back button.</p>
+                    
+                    <h4>✅ How to Verify</h4>
+                    <ul>
+                        <li>Home screen displays 3+ user profiles in a list</li>
+                        <li>Tapping a profile navigates to Detail screen</li>
+                        <li>Detail screen shows the correct user's information</li>
+                        <li>Back button returns to Home screen</li>
+                        <li>Navigation animation works smoothly</li>
+                        <li>Images load correctly</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exercise-item">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Exercise 5: Weather App with API</div>
+                    </div>
+                    <div class="difficulty-badge hard">Advanced</div>
+                </div>
+                <div class="exercise-content">
+                    <h4>📚 What You'll Learn</h4>
+                    <p>API fetching with fetch/axios, useEffect hook, async/await, loading states, error handling, environment variables</p>
+                    
+                    <h4>🎯 Your Task</h4>
+                    <p>Create a weather app that fetches data from OpenWeatherMap API. User enters a city name, app displays current temperature, weather condition, humidity, and an icon. Show loading spinner while fetching and error message if city not found.</p>
+                    
+                    <h4>✅ How to Verify</h4>
+                    <ul>
+                        <li>User can input a city name</li>
+                        <li>Loading indicator appears while fetching data</li>
+                        <li>Weather data displays correctly for valid cities</li>
+                        <li>Error message shows for invalid city names</li>
+                        <li>Can search for multiple cities without app crashing</li>
+                        <li>Temperature and weather icon match the API response</li>
+                        <li>API key is stored securely (not hardcoded in visible code)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="roadmapContainer"></div>
+
+        <footer class="footer">
+            <!-- Stats Section -->
+            <div class="footer-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="statTopics">26</div>
+                    <div class="stat-label">Topics</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="statWeeks">12</div>
+                    <div class="stat-label">Weeks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="statExercises">5</div>
+                    <div class="stat-label">Exercises</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="statPhases">4</div>
+                    <div class="stat-label">Phases</div>
+                </div>
+            </div>
+            <!-- Tips -->
+            <div class="footer-tips">
+                <p>💡 <strong>Tip:</strong> Click "Details" on any topic to see the learning guide, practice projects, and resources</p>
+                <p>⏱️ Recommended: 15-60 min/day based on your phase</p>
+            </div>
+
+            <!-- Quick Navigation -->
+            <div class="footer-nav">
+                <div class="footer-nav-section">
+                    <h4>Quick Links</h4>
+                    <a href="#" onclick="showRoadmap(); return false;" title="View all 26 topics across 4 phases">📍 Roadmap</a>
+                    <a href="#" onclick="toggleWeeklyPlan(); return false;" title="12-week structured daily lessons (Mon-Fri)">📅 Weekly Plan</a>
+                    <a href="#" onclick="togglePracticeExercises(); return false;" title="5 hands-on coding exercises (Beginner to Advanced)">💪 Exercises</a>
+                    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" title="Scroll to top of page">⬆️ Back to Top</a>
+                </div>
+                <div class="footer-nav-section">
+                    <h4>Community</h4>
+                    <a href="https://github.com/yourusername/react-native-roadmap" target="_blank" rel="noopener">⭐ Star on GitHub</a>
+                    <a href="https://github.com/yourusername/react-native-roadmap/issues" target="_blank" rel="noopener">🐛 Report Issue</a>
+                    <a href="https://github.com/yourusername/react-native-roadmap/fork" target="_blank" rel="noopener">🔱 Fork Project</a>
+                    <a href="https://github.com/yourusername/react-native-roadmap/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">🤝 Contribute</a>
+                </div>
+                <div class="footer-nav-section">
+                    <h4>Resources</h4>
+                    <a href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener">📚 Official Docs</a>
+                    <a href="https://expo.dev" target="_blank" rel="noopener">🚀 Expo</a>
+                    <a href="https://github.com/yourusername/react-native-roadmap/blob/main/README.md" target="_blank" rel="noopener">📖 README</a>
+                    <a href="https://github.com/yourusername/react-native-roadmap/blob/main/LICENSE" target="_blank" rel="noopener">📄 MIT License</a>
+                </div>
+            </div>
+
+
+            <!-- Credits -->
+            <div class="footer-credits">
+                <p>Made with ❤️ by <strong>Rajat</strong></p>
+                <p class="footer-year">© 2025 React Native Learning Roadmap • Open Source • MIT License</p>
+            </div>
+        </footer>
+    </div>
+    <script src="roadmap-data.js"></script>    <script src="weekly-plan.js"></script>    <script src="app.js"></script>
+</body>
+</html>
